@@ -36,6 +36,7 @@ In this repository my work flow will be described, and I will select and evaluat
 1. [Raw Data](https://git.generalassemb.ly/jlu90/project_3/tree/master/data)
 2. [Data Retrieval Notebook](https://git.generalassemb.ly/jlu90/project_3/blob/master/code/01-Scraping%20from%20Reddit.ipynb)
 3. [Project Notebook](https://git.generalassemb.ly/jlu90/project_3/blob/master/code/Project%203%20-%20Life%20Pro%20Tips%20vs.%20Unethical%20Life%20Pro%20Tips%20Classification.ipynb)
+4. [Presentation Slides](https://docs.google.com/presentation/d/1KeKIK6G4HgIL9fCKNvE-PmQcndpM3QbJqfTdd7JUSps/edit#slide=id.g8e798177b8_0_772)
 
 ## Data Dictionary
 
