@@ -1,165 +1,63 @@
-# ![](https://ga-dash.s3.amazonaws.com/production/assets/logo-9f88ae6c9c3871690e33280fcf557f33.png) Project 3: Web APIs & NLP
+# README
 
-### Description
+## Problem Statement
 
-In week four we've learned about a few different classifiers. In week five we'll learn about webscraping, APIs, and Natural Language Processing (NLP). This project will put those skills to the test.
+A "life pro tip" is defined as a concise and specific tip that can improve people's lives. The popular website, Reddit has many forums dedicated to helping people improve their lives. Two of the more popular subreddits to gain these tidbits of advice are [r/LifeProTips](https://www.reddit.com/r/LifeProTips/) and [r/UnethicalLifeProTips](https://www.reddit.com/r/UnethicalLifeProTips/). Both provide advice, but due to the nature of the content, their mission statements are very different.
 
-For project 3, your goal is two-fold:
-1. Using [Pushshift's](https://github.com/pushshift/api) API, you'll collect posts from two subreddits of your choosing.
-2. You'll then use NLP to train a classifier on which subreddit a given post came from. This is a binary classification problem.
+[r/LifeProTips](https://www.reddit.com/r/LifeProTips/) has the mission to provide "tips that improve your life in one way or another". In order to ensure that the subreddit does provide good advice, the moderators of the site specifically ban any tips deemed to be common sense, common courtesies or unethical. Any posts suggesting behaviors that are illegal in the United States are also banned. 
 
+[r/UnethicalLifeProTips](https://www.reddit.com/r/UnethicalLifeProTips/) is the complete of opposite of [r/LifeProTips](https://www.reddit.com/r/LifeProTips/). They allow users to post tips that will likely improve lives but might be harmful to others and/or condone behaviors bordering on illegal. Although the moderators suggest the advice is just for fun and should not be followed, several people come to the site to find and request unethical advice. 
 
-#### About the API
+Given the constrasting missions of the two subreddits, it is imperative that no Unethical Life Pro Tips ever be posted to [r/LifeProTips](https://www.reddit.com/r/LifeProTips/). However, in a recent update to the popular website Reddit, a backend engineer accidentally programmed all of the posts that were submitted to the 'Unethical Life Pro Tips' subreddit to be posted to the 'Life Pro Tips' subreddit. ***As the data scientist on the team, I have been assigned the task of building a classificiation model that can accurately classify posts from each subreddit so that r/Life Pro Tips can be free of unethical advice and [r/UnethicalLifeProTips](https://www.reddit.com/r/UnethicalLifeProTips/) can continue to offer new, unethical content.***
 
-Pushshift's API is fairly straightforward. For example, if I want the posts from [`/r/boardgames`](https://www.reddit.com/r/boardgames), all I have to do is use the following url: https://api.pushshift.io/reddit/search/submission?subreddit=boardgames
+## Executive Summary
+Data was collected from r/LifeProTips and r/UnethicalLifeProTips on July 18, 2020 using the [Pushift Reddit API](https://github.com/pushshift/api). In total, 2677 posts from r/LifeProTips were collected, corresponding to 15 days worth of data, and 3961 posts from r/UnethicalLifeProTips were collected, corresponding to approximately 40 weeks of data. Posts were aggreggated into a single data frame and data was cleaned according to standard protocol (handling null values, confirming data types, and searching for any abnormal values). Because text data can contain many symbols and phrases that do not add value to a sentence, any symbols or tags (e.g. '[request]') were removed to the best of my abilities. Additionally, in order to make the task more challenging, the 'LPT' and 'ULPT' tags were also removed from posts. Basic features were engineered to allow for examination of full text in the post, post length in characters, post length in words, and sentiment polarity (-1 = Negative, 1 = Positive).
 
-To help you get started, we have a primer video on how to use the API: https://youtu.be/AcrjEWsMi_E
+Once the data had been clean, text preprocessing was conducted to expand contractions in the text, and posts were tokenized and  words were reduced to their word stems using a Porter stemmer. In order to be compatible with the text vectorizers, the stemmed words were joined as a string. At this point, the data frame was considered ready for exploratory data analysis and modeling. The data dictionary can be found below. 
 
----
+During EDA, distributions for all numeric features were explored, the most frequent word counts were generated per subreddit. Sentiment analysis with TextBlob was also conducted to determine if polarity differed by subreddit. 
 
-### Requirements
+Following EDA, the data was prepared for modeling. Prior to beginning the modeling process, preliminary analyses were conducted to determine the best vectorizer for the data. These analyses revealed that a Tfidf Vectorizer performed better than a Count Vectorizer in Logisitic Regression models, so only Tfidf was used for these models. A 70/30 train test split was conducted, and a column transformer with a Tfidf Vectorizer was created to vectorizer the stemmed text, while also maintaining the original form of any numeric features. 
 
-- Gather and prepare your data using the `requests` library.
-- **Create and compare two models**. One of these must be a Random Forest classifier, however the other can be a classifier of your choosing: logistic regression, KNN, SVM, etc.
-- A Jupyter Notebook with your analysis for a peer audience of data scientists.
-- An executive summary of your results.
-- A short presentation outlining your process and findings for a semi-technical audience.
+During the modeling process, for each model (except for the Baseline/Null Model), a pipeline was created. Pipelines contained the column transformer (Tfidf Vectorizer) and a classification model. GridSearchCV was used to tune hyperparameters, and model performance was evaluated using the accuracy metric. The models built were: 
+1. Baseline/Null Model
+2. Logistic Regression
+3. Logistic Regression with L2 Regularization
+4. Multinomial Bayes
+5. K-Nearest Neighbors (KNN)
+6. Decision Tree
+7. Bagging Classifier
+8. Random Forest
+9. Voting Classifier
 
-**Pro Tip:** You can find a good example executive summary [here](https://www.proposify.biz/blog/executive-summary).
+In this repository my work flow will be described, and I will select and evaluate a model to classify by posts from the r/LifeProTips and r/UnethicalLifeProTips subreddits.
 
----
+## Contents of Repository
+1. [Raw Data](https://git.generalassemb.ly/jlu90/project_3/tree/master/data)
+2. [Data Retrieval Notebook](https://git.generalassemb.ly/jlu90/project_3/blob/master/code/01-Scraping%20from%20Reddit.ipynb)
+3. [Project Notebook](https://git.generalassemb.ly/jlu90/project_3/blob/master/code/Project%203%20-%20Life%20Pro%20Tips%20vs.%20Unethical%20Life%20Pro%20Tips%20Classification.ipynb)
 
-### Necessary Deliverables / Submission
+## Data Dictionary
 
-- Code and executive summary must be in a clearly commented Jupyter Notebook.
-- You must submit your slide deck.
-- Materials must be submitted by **10:00 AM on Friday, July 24th**.
+The clean, preprocessed data used for EDA and modeling can be found [here](https://git.generalassemb.ly/jlu90/project_3/blob/master/data/subreddits_preprocessed.csv).
 
----
-
-## Rubric
-Your local instructor will evaluate your project (for the most part) using the following criteria.  You should make sure that you consider and/or follow most if not all of the considerations/recommendations outlined below **while** working through your project.
-
-For Project 3 the evaluation categories are as follows:<br>
-**The Data Science Process**
-- Problem Statement
-- Data Collection
-- Data Cleaning & EDA
-- Preprocessing & Modeling
-- Evaluation and Conceptual Understanding
-- Conclusion and Recommendations
-
-**Organization and Professionalism**
-- Organization
-- Visualizations
-- Python Syntax and Control Flow
-- Presentation
-
-**Scores will be out of 30 points based on the 10 categories in the rubric.** <br>
-*3 points per section*<br>
-
-| Score | Interpretation |
-| --- | --- |
-| **0** | *Project fails to meet the minimum requirements for this item.* |
-| **1** | *Project meets the minimum requirements for this item, but falls significantly short of portfolio-ready expectations.* |
-| **2** | *Project exceeds the minimum requirements for this item, but falls short of portfolio-ready expectations.* |
-| **3** | *Project meets or exceeds portfolio-ready expectations; demonstrates a thorough understanding of every outlined consideration.* |
+|Column| Data Type| Description|
+|---|---|---|
+subreddit| String| Source of data
+suthor|String| Author of post
+num_comments|Integer|Number of comments a post received
+score|Integer|Score of post
+timestamp|Datetime|Date of post
+original_text|String|Text from original post
+post_length_char|Integer|Character length of post
+post_length_words|Integer|Word count of post
+is_unethical|Integer|Binary variable denoting if a post came from Unethical Life Pro Tips
+stemmer_text|String|Post with stemmed text
+polarity|Float|Positive or negative sentiment of post ranging from 1 (positive) to -1 (negative)
+sentiment_cat|String|Category of sentiment based on polarity score
 
 
-### The Data Science Process
+## Key Findings and Conclusions
+For this problem, I was tasked with building a classification model that could accurately distinguish posts from the r/LifeProTipsSubreddit from the r/UnethicalLifeProTips Subreddit. The best-performing model was a Random Forest Classifier with an accuracy of 78% and a sensitivity of 90.6%. This model is good at accurately predicting posts from the r/UnethicalLifeProTips Subreddit, but it performs almost at Baseline for posts from r/LifeProTips. Although the consequences of posting genuine Life Pro Tips to r/UnethicalLifeProTips are probably minimal (unless it encourages people to behave more ethically!), to truly accomplish the task at hand, prior to being production-ready, we should try to improve the overall accuracy score. 
 
-**Problem Statement**
-- Is it clear what the goal of the project is?
-- What type of model will be developed?
-- How will success be evaluated?
-- Is the scope of the project appropriate?
-- Is it clear who cares about this or why this is important to investigate?
-- Does the student consider the audience and the primary and secondary stakeholders?
-
-**Data Collection**
-- Was enough data gathered to generate a significant result?
-- Was data collected that was useful and relevant to the project?
-- Was data collection and storage optimized through custom functions, pipelines, and/or automation?
-- Was thought given to the server receiving the requests such as considering number of requests per second?
-
-**Data Cleaning and EDA**
-- Are missing values imputed/handled appropriately?
-- Are distributions examined and described?
-- Are outliers identified and addressed?
-- Are appropriate summary statistics provided?
-- Are steps taken during data cleaning and EDA framed appropriately?
-- Does the student address whether or not they are likely to be able to answer their problem statement with the provided data given what they've discovered during EDA?
-
-**Preprocessing and Modeling**
-- Is text data successfully converted to a matrix representation?
-- Are methods such as stop words, stemming, and lemmatization explored?
-- Does the student properly split and/or sample the data for validation/training purposes?
-- Does the student test and evaluate a variety of models to identify a production algorithm (**AT MINIMUM:** Bayes and one other model)?
-- Does the student defend their choice of production model relevant to the data at hand and the problem?
-- Does the student explain how the model works and evaluate its performance successes/downfalls?
-
-**Evaluation and Conceptual Understanding**
-- Does the student accurately identify and explain the baseline score?
-- Does the student select and use metrics relevant to the problem objective?
-- Does the student interpret the results of their model for purposes of inference?
-- Is domain knowledge demonstrated when interpreting results?
-- Does the student provide appropriate interpretation with regards to descriptive and inferential statistics?
-
-**Conclusion and Recommendations**
-- Does the student provide appropriate context to connect individual steps back to the overall project?
-- Is it clear how the final recommendations were reached?
-- Are the conclusions/recommendations clearly stated?
-- Does the conclusion answer the original problem statement?
-- Does the student address how findings of this research can be applied for the benefit of stakeholders?
-- Are future steps to move the project forward identified?
-
-
-### Organization and Professionalism
-
-**Project Organization**
-- Are modules imported correctly (using appropriate aliases)?
-- Are data imported/saved using relative paths?
-- Does the README provide a good executive summary of the project?
-- Is markdown formatting used appropriately to structure notebooks?
-- Are there an appropriate amount of comments to support the code?
-- Are files & directories organized correctly?
-- Are there unnecessary files included?
-- Do files and directories have well-structured, appropriate, consistent names?
-
-**Visualizations**
-- Are sufficient visualizations provided?
-- Do plots accurately demonstrate valid relationships?
-- Are plots labeled properly?
-- Are plots interpreted appropriately?
-- Are plots formatted and scaled appropriately for inclusion in a notebook-based technical report?
-
-**Python Syntax and Control Flow**
-- Is care taken to write human readable code?
-- Is the code syntactically correct (no runtime errors)?
-- Does the code generate desired results (logically correct)?
-- Does the code follows general best practices and style guidelines?
-- Are Pandas functions used appropriately?
-- Are `sklearn` and `NLTK` methods used appropriately?
-
-**Presentation**
-- Is the problem statement clearly presented?
-- Does a strong narrative run through the presentation building toward a final conclusion?
-- Are the conclusions/recommendations clearly stated?
-- Is the level of technicality appropriate for the intended audience?
-- Is the student substantially over or under time?
-- Does the student appropriately pace their presentation?
-- Does the student deliver their message with clarity and volume?
-- Are appropriate visualizations generated for the intended audience?
-- Are visualizations necessary and useful for supporting conclusions/explaining findings?
-
-
----
-
-### Why did we choose this project for you?
-This project covers three of the biggest concepts we cover in the class: Classification Modeling, Natural Language Processing and Data Wrangling/Acquisition.
-
-Part 1 of the project focuses on **Data wrangling/gathering/acquisition**. This is a very important skill as not all the data you will need will be in clean CSVs or a single table in SQL.  There is a good chance that wherever you land you will have to gather some data from some unstructured/semi-structured sources; when possible, requesting information from an API, but often scraping it because they don't have an API (or it's terribly documented).
-
-Part 2 of the project focuses on **Natural Language Processing** and converting standard text data (like Titles and Comments) into a format that allows us to analyze it and use it in modeling.
-
-Part 3 of the project focuses on **Classification Modeling**.  Given that project 2 was a regression focused problem, we needed to give you a classification focused problem to practice the various models, means of assessment and preprocessing associated with classification.   
+To begin the next round of improvements, we will learn from our models and manually prune features from the vector of words. Once the dimensionality of the models has been reduced, we will be able to tune our models in hopes of improving the overall accuracy.
