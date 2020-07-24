@@ -33,9 +33,9 @@ During the modeling process, for each model (except for the Baseline/Null Model)
 In this repository my work flow will be described, and I will select and evaluate a model to classify by posts from the r/LifeProTips and r/UnethicalLifeProTips subreddits.
 
 ## Contents of Repository
-1. [Raw Data]()
-2. [Data Retrieval Notebook]()
-3. [Project Notebook]()
+1. [Raw Data](https://git.generalassemb.ly/jlu90/project_3/tree/master/data)
+2. [Data Retrieval Notebook](https://git.generalassemb.ly/jlu90/project_3/blob/master/code/01-Scraping%20from%20Reddit.ipynb)
+3. [Project Notebook](https://git.generalassemb.ly/jlu90/project_3/blob/master/code/Project%203%20-%20Life%20Pro%20Tips%20vs.%20Unethical%20Life%20Pro%20Tips%20Classification.ipynb)
 
 ## Data Dictionary
 
